@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="discordGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5865F2"/>
+      <stop offset="100%" stop-color="#404EED"/>
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="45" fill="#2f3136" stroke="url(#discordGradient)" stroke-width="4"/>
+  <g id="typingDots">
+    <circle cx="30" cy="50" r="5" fill="#ffffff" opacity="0.8">
+      <animate attributeName="opacity" 
+        values="0.8;0.3;0.8" 
+        dur="1.2s" 
+        repeatCount="indefinite" 
+        begin="0s" 
+        calcMode="spline" 
+        keySplines="0.5 0 0.5 1; 0.5 0 0.5 1"/>
+    </circle>
+    <circle cx="50" cy="50" r="5" fill="#ffffff" opacity="0.6">
+      <animate attributeName="opacity" 
+        values="0.6;0.3;0.6" 
+        dur="1.2s" 
+        repeatCount="indefinite" 
+        begin="0.2s" 
+        calcMode="spline" 
+        keySplines="0.5 0 0.5 1; 0.5 0 0.5 1"/>
+    </circle>
+    <circle cx="70" cy="50" r="5" fill="#ffffff" opacity="0.4">
+      <animate attributeName="opacity" 
+        values="0.4;0.3;0.4" 
+        dur="1.2s" 
+        repeatCount="indefinite" 
+        begin="0.4s" 
+        calcMode="spline" 
+        keySplines="0.5 0 0.5 1; 0.5 0 0.5 1"/>
+    </circle>
+  </g>
+</svg>

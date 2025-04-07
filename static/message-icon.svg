@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <style>
+    .background { fill: #5865F2; }
+    .message-bubble { fill: #FFFFFF; }
+    .message-text { fill: #2F3136; }
+    .ring { fill: none; stroke: #FFFFFF; stroke-width: 7; }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .message-group {
+      animation: float 3s infinite ease-in-out;
+    }
+  </style>
+  
+  <!-- Background circle -->
+  <circle class="background" cx="100" cy="100" r="85"/>
+  
+  <!-- Outer ring -->
+  <circle class="ring" cx="100" cy="100" r="95" stroke-dasharray="15 7"/>
+  
+  <!-- Message bubbles group -->
+  <g class="message-group">
+    <!-- Main message bubble -->
+    <path class="message-bubble" d="M140,80 C150,80 160,90 160,100 L160,130 C160,140 150,150 140,150 L80,150 L60,170 L60,150 L60,150 C50,150 40,140 40,130 L40,100 C40,90 50,80 60,80 Z"/>
+    
+    <!-- Message text lines -->
+    <rect class="message-text" x="60" y="100" width="80" height="5" rx="2"/>
+    <rect class="message-text" x="60" y="115" width="60" height="5" rx="2"/>
+    <rect class="message-text" x="60" y="130" width="40" height="5" rx="2"/>
+    
+    <!-- Small decorative bubbles -->
+    <circle class="message-bubble" cx="50" cy="50" r="15" opacity="0.7"/>
+    <circle class="message-bubble" cx="30" cy="70" r="10" opacity="0.5"/>
+    <circle class="message-bubble" cx="150" cy="60" r="12" opacity="0.6"/>
+    <circle class="message-bubble" cx="170" cy="80" r="8" opacity="0.4"/>
+    
+    <!-- Small dots inside some bubbles -->
+    <circle class="message-text" cx="50" cy="50" r="3" opacity="0.7"/>
+    <circle class="message-text" cx="150" cy="60" r="3" opacity="0.7"/>
+  </g>
+  
+  <!-- Small notification dot -->
+  <circle fill="#ED4245" cx="150" cy="70" r="15"/>
+  <text x="150" y="75" text-anchor="middle" fill="white" font-family="Arial" font-weight="bold" font-size="16">1</text>
+</svg>
