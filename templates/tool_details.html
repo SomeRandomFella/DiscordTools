@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool Details - Discord Tools</title>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <style>
+        body { 
+            background-color: #36393f; 
+            color: #dcddde; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar { background-color: #202225; }
+        .card { background-color: #2f3136; border: none; }
+        .card-header { background-color: #202225; }
+        pre { color: #dcddde; }
+        .log-container {
+            max-height: 400px;
+            overflow-y: auto;
+            background-color: #202225;
+            border-radius: 0.25rem;
+        }
+        .log-entry {
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid #36393f;
+        }
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        .log-timestamp {
+            color: #72767d;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+        .log-level-INFO {
+            color: #00b0f4;
+        }
+        .log-level-WARNING {
+            color: #faa61a;
+        }
+        .log-level-ERROR {
+            color: #f04747;
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .status-running { background-color: #43b581; }
+        .status-stopped { background-color: #747f8d; }
+        .status-crashed { background-color: #f04747; }
+        .status-rate_limited { background-color: #faa61a; }
+        .footer {
+            margin-top: auto;
+            background-color: #202225;
+        }
+        .online-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #43b581;
+            display: inline-block;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Discord Tools</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    </li>
+                </ul>
+                <div class="dropdown">
+                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ current_user.username }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 text-white">
+                <a href="{{ url_for('dashboard') }}" class="text-decoration-none me-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                    </svg>
+                </a>
+                {{ tool.tool_type|capitalize }} Tool Details
+            </h1>
+            <div>
+                {% if tool.status == 'running' %}
+                <form action="{{ url_for('stop_bot', tool_id=tool.id) }}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-danger">Stop Tool</button>
+                </form>
+                {% elif tool.status == 'stopped' or tool.status == 'crashed' or tool.status == 'rate_limited' %}
+                <form action="{{ url_for('restart_bot', tool_id=tool.id) }}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-success">Start Tool</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- Tool Status -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Status</h5>
+                        <span class="badge bg-secondary">Channel: {{ tool.channel_id }}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="me-3">
+                                <span class="status-indicator status-{{ tool.status }}"></span>
+                                {% if tool.status == 'running' %}
+                                <span class="text-success">Running</span>
+                                {% elif tool.status == 'stopped' %}
+                                <span class="text-secondary">Stopped</span>
+                                {% elif tool.status == 'crashed' %}
+                                <span class="text-danger">Crashed</span>
+                                {% elif tool.status == 'rate_limited' %}
+                                <span class="text-warning">Rate Limited</span>
+                                {% endif %}
+                            </div>
+                            {% if running and uptime %}
+                            <div>
+                                <span class="text-muted">Uptime: {{ uptime }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <strong>Created:</strong> {{ tool.created_at.strftime('%Y-%m-%d %H:%M') }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <strong>Last Updated:</strong> {{ tool.updated_at.strftime('%Y-%m-%d %H:%M') }}
+                        </div>
+                        
+                        {% if tool.tool_type == 'user' %}
+                        <div class="mb-3">
+                            <strong>Anti-Detection Features:</strong>
+                            <div class="mt-2">
+                                {% if tool.random_intervals %}
+                                <span class="badge bg-info me-1">Random Intervals ({{ tool.min_interval }}-{{ tool.max_interval }}s)</span>
+                                {% endif %}
+                                {% if tool.random_breaks %}
+                                <span class="badge bg-info me-1">Random Breaks ({{ tool.break_chance * 100 }}% chance)</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="d-flex mt-4">
+                            <form action="{{ url_for('delete_tool', tool_id=tool.id) }}" method="post" 
+                                  onsubmit="return confirm('Are you sure you want to delete this tool? This action cannot be undone.');">
+                                <button type="submit" class="btn btn-outline-danger">Delete Tool</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tool Configuration -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Configuration</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if tool.tool_type == 'user' %}
+                        <form action="{{ url_for('update_tool_config', tool_id=tool.id) }}" method="post">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="random_intervals" name="random_intervals" 
+                                       {% if tool.random_intervals %}checked{% endif %}>
+                                <label class="form-check-label" for="random_intervals">
+                                    Use random typing intervals
+                                </label>
+                                <div class="form-text">Randomize timing between typing indicators to appear more human-like</div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="min_interval" class="form-label">Minimum interval (seconds)</label>
+                                    <input type="number" class="form-control" id="min_interval" name="min_interval" 
+                                           value="{{ tool.min_interval }}" min="1" max="60">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="max_interval" class="form-label">Maximum interval (seconds)</label>
+                                    <input type="number" class="form-control" id="max_interval" name="max_interval" 
+                                           value="{{ tool.max_interval }}" min="2" max="120">
+                                </div>
+                            </div>
+                            
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="random_breaks" name="random_breaks" 
+                                       {% if tool.random_breaks %}checked{% endif %}>
+                                <label class="form-check-label" for="random_breaks">
+                                    Take random breaks
+                                </label>
+                                <div class="form-text">Randomly pause typing to avoid detection</div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="break_chance" class="form-label">Break chance (%)</label>
+                                    <input type="number" class="form-control" id="break_chance" name="break_chance" 
+                                           value="{{ (tool.break_chance * 100)|int }}" min="1" max="50">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="min_break" class="form-label">Min break (seconds)</label>
+                                    <input type="number" class="form-control" id="min_break" name="min_break" 
+                                           value="{{ tool.min_break }}" min="10" max="3600">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="max_break" class="form-label">Max break (seconds)</label>
+                                    <input type="number" class="form-control" id="max_break" name="max_break" 
+                                           value="{{ tool.max_break }}" min="60" max="7200">
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid mt-3">
+                                <button type="submit" class="btn btn-primary">Update Configuration</button>
+                            </div>
+                            
+                            {% if tool.status == 'running' %}
+                            <div class="alert alert-info mt-3">
+                                <small>Note: You'll need to restart the tool for these changes to take effect.</small>
+                            </div>
+                            {% endif %}
+                        </form>
+                        {% else %}
+                        <div class="alert alert-info">
+                            <p>This tool has a fixed configuration. For more customization options, consider using the User Token version instead.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tool Logs -->
+            <div class="col-12 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Logs</h5>
+                        <button id="refresh-logs" class="btn btn-sm btn-outline-light">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                                <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                            </svg>
+                            Refresh
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="log-container" id="log-container">
+                            {% if logs %}
+                                {% for log in logs %}
+                                <div class="log-entry">
+                                    <span class="log-timestamp">{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+                                    <span class="log-level-{{ log.level }}">{{ log.level }}</span>
+                                    <span class="log-message">{{ log.message }}</span>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="p-4 text-center text-muted">
+                                    <p>No logs available</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer py-4 text-center mt-auto">
+        <div class="container">
+            <div class="mb-3">
+                <a href="https://github.com/SomeRandomFella/DiscordTools" class="text-decoration-none text-light">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                    <span class="ms-2">Repo</span>
+                </a>
+            </div>
+            <p class="text-light-emphasis mb-0">&copy; 2025 Discord Tools. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const logContainer = document.getElementById('log-container');
+            const refreshButton = document.getElementById('refresh-logs');
+            
+            // Auto-scroll to bottom of logs
+            if (logContainer) {
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }
+            
+            // Refresh logs functionality
+            if (refreshButton) {
+                refreshButton.addEventListener('click', function() {
+                    fetch('{{ url_for("get_logs", tool_id=tool.id) }}')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.logs && data.logs.length > 0) {
+                                let logHtml = '';
+                                data.logs.forEach(log => {
+                                    logHtml += `
+                                    <div class="log-entry">
+                                        <span class="log-timestamp">${log.timestamp}</span>
+                                        <span class="log-level-${log.level}">${log.level}</span>
+                                        <span class="log-message">${log.message}</span>
+                                    </div>`;
+                                });
+                                logContainer.innerHTML = logHtml;
+                                logContainer.scrollTop = logContainer.scrollHeight;
+                            } else {
+                                logContainer.innerHTML = `
+                                <div class="p-4 text-center text-muted">
+                                    <p>No logs available</p>
+                                </div>`;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching logs:', error);
+                        });
+                });
+                
+                // Auto-refresh logs every 10 seconds if tool is running
+                {% if tool.status == 'running' %}
+                setInterval(() => {
+                    refreshButton.click();
+                }, 10000);
+                {% endif %}
+            }
+        });
+    </script>
+</body>
+</html>

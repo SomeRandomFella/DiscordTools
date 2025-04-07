@@ -1,0 +1,28 @@
+# Discord Tools Suite Configuration
+# This file replaces .replit with the same functionality
+
+[env]
+PYTHONPATH = "."
+PYTHONUNBUFFERED = "1"
+
+[nix]
+channel = "stable-22_11"
+
+[languages]
+python = 3.11
+
+[dev]
+port = 5000
+host = "0.0.0.0"
+
+[deploy]
+deploymentTarget = "cloudrun"
+run = ["python", "run.py"]
+ignorePorts = false
+
+[server]
+command = "python run.py"
+port = 5000
+
+[packager]
+language = "python3"

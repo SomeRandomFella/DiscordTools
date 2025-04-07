@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="50" cy="50" r="45" fill="#2f3136" stroke="#7289DA" stroke-width="3"/>
+  <circle cx="50" cy="50" r="35" fill="#36393f"/>
+  <circle cx="50" cy="50" r="8" fill="#43b581">
+    <animate attributeName="fill" values="#43b581;#faa61a;#f04747;#43b581" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="50" cy="50" r="20" fill="none" stroke="#7289DA" stroke-width="2" stroke-dasharray="5,5">
+    <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="20s" repeatCount="indefinite"/>
+  </circle>
+</svg>

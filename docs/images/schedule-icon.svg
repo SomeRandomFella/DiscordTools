@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect x="15" y="20" width="70" height="65" rx="4" fill="#2f3136" stroke="#7289DA" stroke-width="3"/>
+  <rect x="20" y="35" width="60" height="45" rx="2" fill="#36393f"/>
+  
+  <!-- Calendar header -->
+  <rect x="15" y="20" width="70" height="15" rx="4" fill="#202225"/>
+  
+  <!-- Days -->
+  <circle cx="30" cy="47" r="5" fill="#7289DA" opacity="0.5"/>
+  <circle cx="50" cy="47" r="5" fill="#7289DA" opacity="0.5"/>
+  <circle cx="70" cy="47" r="5" fill="#7289DA" opacity="0.5"/>
+  
+  <circle cx="30" cy="67" r="5" fill="#7289DA" opacity="0.5"/>
+  <circle cx="50" cy="67" r="5" fill="#7289DA"/>
+  <circle cx="70" cy="67" r="5" fill="#7289DA" opacity="0.5"/>
+  
+  <!-- Clock hands -->
+  <circle cx="50" cy="67" r="10" fill="none" stroke="#43b581" stroke-width="2"/>
+  
+  <line x1="50" y1="67" x2="50" y2="60" stroke="#43b581" stroke-width="2" stroke-linecap="round">
+    <animateTransform attributeName="transform" type="rotate" from="0 50 67" to="360 50 67" dur="6s" repeatCount="indefinite"/>
+  </line>
+  
+  <line x1="50" y1="67" x2="55" y2="67" stroke="#43b581" stroke-width="2" stroke-linecap="round">
+    <animateTransform attributeName="transform" type="rotate" from="0 50 67" to="360 50 67" dur="60s" repeatCount="indefinite"/>
+  </line>
+</svg>

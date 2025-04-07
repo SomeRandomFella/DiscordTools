@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <style>
+    .emoji { fill: #FFD54F; }
+    .emoji-face { fill: #FFC107; }
+    .emoji-eyes { fill: #5D4037; }
+    .emoji-mouth { fill: #5D4037; }
+    .background { fill: #5865F2; }
+    .ring { fill: none; stroke: #FFFFFF; stroke-width: 7; }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    .emoji {
+      animation: pulse 2s infinite;
+      transform-origin: center;
+    }
+  </style>
+  
+  <!-- Background circle -->
+  <circle class="background" cx="100" cy="100" r="85"/>
+  
+  <!-- Outer ring -->
+  <circle class="ring" cx="100" cy="100" r="95" stroke-dasharray="15 7"/>
+  
+  <!-- Emoji central group -->
+  <g class="emoji">
+    <!-- Emoji main face -->
+    <circle class="emoji-face" cx="100" cy="100" r="55"/>
+    
+    <!-- Emoji smile -->
+    <path class="emoji-mouth" d="M130 110 Q100 140 70 110" stroke-width="6" stroke="#5D4037" fill="none"/>
+    
+    <!-- Emoji eyes -->
+    <circle class="emoji-eyes" cx="70" cy="85" r="8"/>
+    <circle class="emoji-eyes" cx="130" cy="85" r="8"/>
+  </g>
+  
+  <!-- Small reaction emojis around -->
+  <g>
+    <circle class="emoji-face" cx="50" cy="40" r="20"/>
+    <path class="emoji-mouth" d="M60 40 Q50 50 40 40" stroke-width="3" stroke="#5D4037" fill="none"/>
+    <circle class="emoji-eyes" cx="45" cy="35" r="3"/>
+    <circle class="emoji-eyes" cx="55" cy="35" r="3"/>
+  </g>
+  
+  <g>
+    <circle class="emoji-face" cx="150" cy="40" r="20"/>
+    <path class="emoji-mouth" d="M160 45 Q150 35 140 45" stroke-width="3" stroke="#5D4037" fill="none"/>
+    <circle class="emoji-eyes" cx="145" cy="35" r="3"/>
+    <circle class="emoji-eyes" cx="155" cy="35" r="3"/>
+  </g>
+  
+  <g>
+    <circle class="emoji-face" cx="150" cy="160" r="20"/>
+    <circle class="emoji-mouth" cx="150" cy="162" r="8" fill="#5D4037"/>
+    <circle class="emoji-eyes" cx="145" cy="155" r="3"/>
+    <circle class="emoji-eyes" cx="155" cy="155" r="3"/>
+  </g>
+  
+  <g>
+    <circle class="emoji-face" cx="50" cy="160" r="20"/>
+    <path class="emoji-mouth" d="M42 158 H58" stroke-width="3" stroke="#5D4037" fill="none"/>
+    <circle class="emoji-eyes" cx="45" cy="155" r="3"/>
+    <circle class="emoji-eyes" cx="55" cy="155" r="3"/>
+  </g>
+</svg>

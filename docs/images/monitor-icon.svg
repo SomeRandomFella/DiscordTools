@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <style>
+    .background { fill: #5865F2; }
+    .screen { fill: #2F3136; stroke: #FFFFFF; stroke-width: 4; }
+    .graph-line { fill: none; stroke: #43B581; stroke-width: 4; stroke-linecap: round; }
+    .dot { fill: #FFFFFF; }
+    .ring { fill: none; stroke: #FFFFFF; stroke-width: 7; }
+    .ping { fill: #43B581; }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    
+    .blinking-dot {
+      animation: blink 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(2.5); opacity: 0; }
+    }
+    
+    .ping-pulse {
+      animation: pulse 2s infinite;
+    }
+  </style>
+  
+  <!-- Background circle -->
+  <circle class="background" cx="100" cy="100" r="85"/>
+  
+  <!-- Outer ring -->
+  <circle class="ring" cx="100" cy="100" r="95" stroke-dasharray="15 7"/>
+  
+  <!-- Monitor screen -->
+  <rect class="screen" x="50" y="60" width="100" height="70" rx="5"/>
+  
+  <!-- Monitor base -->
+  <path fill="#FFFFFF" d="M85,130 L115,130 L120,145 L80,145 Z"/>
+  
+  <!-- Activity graph line -->
+  <polyline class="graph-line" points="60,110 75,100 90,115 105,90 120,95 135,80"/>
+  
+  <!-- Blinking activity dots -->
+  <circle class="dot blinking-dot" cx="60" cy="110" r="3"/>
+  <circle class="dot blinking-dot" cx="75" cy="100" r="3"/>
+  <circle class="dot blinking-dot" cx="90" cy="115" r="3"/>
+  <circle class="dot blinking-dot" cx="105" cy="90" r="3"/>
+  <circle class="dot blinking-dot" cx="120" cy="95" r="3"/>
+  <circle class="dot blinking-dot" cx="135" cy="80" r="3"/>
+  
+  <!-- Online status ping in corner -->
+  <circle class="ping" cx="140" cy="70" r="8"/>
+  <circle class="ping ping-pulse" cx="140" cy="70" r="8" opacity="0.5"/>
+  
+  <!-- Small user icons -->
+  <circle fill="#FFFFFF" cx="60" cy="75" r="6"/>
+  <circle fill="#FFFFFF" cx="80" cy="75" r="6"/>
+  <circle fill="#FFFFFF" cx="100" cy="75" r="6"/>
+  <circle fill="#FFFFFF" cx="120" cy="75" r="6"/>
+</svg>
